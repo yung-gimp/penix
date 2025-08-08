@@ -1,8 +1,10 @@
-{ config, lib, ... }:
-let
-  cfg = config.cm.programs.nvf;
-in
 {
+  config,
+  lib,
+  ...
+}: let
+  cfg = config.cm.programs.nvf;
+in {
   options.cm.programs.nvf.enable = lib.mkEnableOption "Enable NVF";
 
   config.programs.nvf = lib.mkIf cfg.enable {
@@ -42,6 +44,10 @@ in
           rust = {
             enable = true;
             lsp.enable = true;
+          };
+          markdown = {
+            enable = true;
+            extensions.markview-nvim.enable = true;
           };
         };
 

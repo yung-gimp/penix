@@ -1,5 +1,3 @@
-{ pkgs, ... }:
-
 {
   boot = {
     initrd.availableKernelModules = [
@@ -11,22 +9,13 @@
       "usb_storage"
       "sd_mod"
     ];
-    kernelModules = [ "kvm-amd" ];
+    kernelModules = ["kvm-amd"];
   };
 
   hardware = {
     graphics = {
       enable = true;
       enable32Bit = true;
-      extraPackages = with pkgs; [
-        amdvlk
-      ];
-    };
-
-    amdgpu = {
-      initrd.enable = true;
-      opencl.enable = true;
-      amdvlk.enable = true;
     };
 
     cpu.amd.updateMicrocode = true;

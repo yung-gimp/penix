@@ -1,33 +1,34 @@
 {
   inputs,
-  lib,
   self,
+  pkgs,
   ...
-}:
-
-{
+}: {
   ff = {
     common.enable = true;
 
     services = {
       ananicy.enable = true;
-      kmscon = {
+      # virt-reality = {
+      #   enable = true;
+      #   autoStart = true;
+      # };
+
+      consoles = {
         enable = true;
-        disableAt = [
-          "tty1"
-        ];
+        getty = ["codman@tty1"];
+        kmscon = ["tty2"];
       };
-      pipewire.enable = true;
+      # pipewire.enable = true;
     };
 
     system = {
-      fontsu.enable = true;
       nix.enable = true;
       performance.enable = true;
       systemd-boot.enable = true;
-      persistence = {
+      preservation = {
         enable = true;
-        ephHome = true;
+        preserveHome = true;
       };
     };
 
@@ -36,11 +37,20 @@
         codman = {
           uid = 1000;
           role = "admin";
-          tags = [ "base" ];
+          tags = ["base"];
           hashedPassword = "$6$i8pqqPIplhh3zxt1$bUH178Go8y5y6HeWKIlyjMUklE2x/8Vy9d3KiCD1WN61EtHlrpWrGJxphqu7kB6AERg6sphGLonDeJvS/WC730";
+          preservation.directories = [".config/r2modman" ".config/r2modmanPlus-local"];
         };
       };
     };
+  };
+
+  services.pipewire = {
+    enable = true;
+    audio.enable = true;
+    alsa.enable = true;
+    jack.enable = true;
+    pulse.enable = true;
   };
 
   home-manager.users.codman = {
@@ -59,72 +69,37 @@
         git.enable = true;
         media.enable = true;
         nvf.enable = true;
+        foot.enable = true;
+        zsh.enable = true;
       };
     };
   };
 
-  services.pipewire = {
-    wireplumber.extraConfig = {
-      "clarettPro" = {
-        "monitor.alsa.rules" = [
-          {
-            matches = [
-              { "device.name" = "alsa_card.usb-Focusrite_Clarett__4Pre_00009991-00"; }
-            ];
-            actions = {
-              update-props = {
-                "device.profile" = "pro-audio";
-              };
-            };
-          }
-        ];
-      };
-    };
+  #age.rekey.agePlugins = [pkgs.age-plugin-fido2-hmac];
 
-    extraConfig.pipewire."clarett" = {
-      "context.modules" = [
-        {
-          name = "libpipewire-module-loopback";
-          args = {
-            "node.description" = "Clarett stereo pair 1";
-            "capture.props" = {
-              "node.name" = "clarett_stereo_pair_1";
-              "media.class" = "Audio/Sink";
-              "audio.position" = "[ FL FR ]";
-            };
-            "playback.props" = {
-              "node.name" = "playback.clarett_stereo_pair_1";
-              "audio.position" = "[ AUX0 AUX1 ]";
-              "target.object" = "alsa_output.usb-Focusrite_Clarett__4Pre_00009991-00.pro-output-0";
-              "stream.dont-remix" = "true";
-              "node.passive" = "true";
-            };
-          };
-        }
-        {
-          name = "libpipewire-module-loopback";
-          args = {
-            "node.description" = "Clarett stereo pair 2";
-            "capture.props" = {
-              "node.name" = "clarett_stereo_pair_2";
-              "media.class" = "Audio/Sink";
-              "audio.position" = "[ FL FR ]";
-            };
-            "playback.props" = {
-              "node.name" = "playback.clarett_stereo_pair_2";
-              "audio.position" = "[ AUX2 AUX3 ]";
-              "target.object" = "alsa_output.usb-Focusrite_Clarett__4Pre_00009991-00.pro-output-0";
-              "stream.dont-remix" = "true";
-              "node.passive" = "true";
-            };
-          };
-        }
+  boot = {
+    kernelPackages = pkgs.linuxPackages_zen;
+    plymouth = {
+      theme = "spinner_alt";
+      themePackages = [
+        (pkgs.adi1090x-plymouth-themes.override {
+          selected_themes = ["spinner_alt"];
+        })
       ];
     };
   };
 
-  services.scx.enable = lib.mkForce false;
-  systemd.tmpfiles.rules = [ "d /nix/persist/games 0750 codman users" ];
+  fonts = {
+    fontconfig.defaultFonts.monospace = ["BlexMono Nerd Font Mono"];
+    packages = with pkgs; [noto-fonts liberation_ttf nerd-fonts.iosevka-term-slab nerd-fonts.blex-mono];
+  };
+
+  hardware.bluetooth.enable = true;
+
+  services.tailscale.enable = true;
+  systemd.tmpfiles.rules = [
+    "d /home/codman 0750 codman users" #should maybe add to preservation
+  ];
 
   environment.variables = {
     EDITOR = "nvim";
@@ -132,15 +107,25 @@
     MANPAGER = "nvim +Man!";
   };
 
+  fileSystems."/home/codman/games" = {
+    depends = ["/nix/persist/games"];
+    device = "/nix/persist/games";
+    fsType = "none";
+    options = ["bind"];
+  };
+
   nixpkgs = {
     hostPlatform = "x86_64-linux";
-    config.allowUnfree = true;
+    config = {
+      allowUnfree = true;
+      permittedInsecurePackages = ["qtwebengine-5.15.19"];
+    };
   };
   system.stateVersion = "25.05";
 
   imports = [
-    inputs.ff.nixosModules.freedpomFlake
     inputs.disko.nixosModules.disko
+    ./audio.nix
     ./programs
     ./disko.nix
     ./hardware.nix

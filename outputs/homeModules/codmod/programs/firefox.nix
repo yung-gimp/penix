@@ -4,16 +4,13 @@
   lib,
   pkgs,
   ...
-}:
-let
+}: let
   cfg = config.cm.programs.firefox;
-in
-{
+in {
   options.cm.programs.firefox.enable = lib.mkEnableOption "Enable Firefox";
 
   config = lib.mkIf cfg.enable {
     programs.firefox = {
-
       enable = true;
 
       profiles.default = {
@@ -31,7 +28,5 @@ in
         };
       };
     };
-
-    home.persistence.${config.cm.perDir}.directories = [ ".mozilla" ];
   };
 }

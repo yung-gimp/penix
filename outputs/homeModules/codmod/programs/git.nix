@@ -1,8 +1,10 @@
-{ config, lib, ... }:
-let
-  cfg = config.cm.programs.git;
-in
 {
+  config,
+  lib,
+  ...
+}: let
+  cfg = config.cm.programs.git;
+in {
   options.cm.programs.git.enable = lib.mkEnableOption "Enable git";
 
   config = lib.mkIf cfg.enable {
@@ -18,7 +20,5 @@ in
         settings.protocol = "ssh";
       };
     };
-
-    home.persistence.${config.cm.perDir}.directories = [ ".config/gh" ];
   };
 }

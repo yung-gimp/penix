@@ -1,8 +1,7 @@
 {
-  description = "big gimpin";
+  description = "much puter";
 
   nixConfig = {
-
     extra-substituters = [
       "https://cache.nixos.org"
       "https://nix-community.cachix.org"
@@ -16,10 +15,8 @@
     ];
   };
 
-  outputs =
-    inputs@{ flake-parts, ... }:
-    flake-parts.lib.mkFlake { inherit inputs; } {
-
+  outputs = inputs @ {flake-parts, ...}:
+    flake-parts.lib.mkFlake {inherit inputs;} {
       systems = [
         "x86_64-linux"
         "aarch64-linux"
@@ -32,27 +29,24 @@
         ./outputs
       ];
 
-      perSystem =
-        {
-          config,
-          lib,
-          pkgs,
-          ...
-        }:
-        {
-          devShells.default = lib.mkForce (
-            pkgs.mkShell {
-              nativeBuildInputs = [
-                config.agenix-rekey.package
-                pkgs.age-plugin-fido2-hmac
-              ];
-            }
-          );
-        };
+      perSystem = {
+        config,
+        lib,
+        pkgs,
+        ...
+      }: {
+        devShells.default = lib.mkForce (
+          pkgs.mkShell {
+            nativeBuildInputs = [
+              config.agenix-rekey.package
+              pkgs.age-plugin-fido2-hmac
+            ];
+          }
+        );
+      };
     };
 
   inputs = {
-
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     disko = {
@@ -70,13 +64,18 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # ff = {
+    #   url = "/home/codman/Documents/nix/FreedpomFlake";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     agenix = {
-      url = "github:yaxitech/ragenix";
+      url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -85,12 +84,15 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    agenix-rekey.url = "github:oddlama/agenix-rekey";
+    agenix-rekey = {
+      url = "github:oddlama/agenix-rekey";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     firefox-addons.url = "gitlab:/rycee/nur-expressions?dir=pkgs/firefox-addons";
 
     flake-parts.url = "github:hercules-ci/flake-parts";
 
-    impermanence.url = "github:nix-community/impermanence";
+    preservation.url = "github:nix-community/preservation";
   };
 }
