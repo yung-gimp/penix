@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   imports = [./klipper.nix];
   containers.printor = {
     autoStart = false;
@@ -116,14 +115,14 @@
           after = ["orcaslicer-vnc.service"];
           requires = ["orcaslicer-vnc.service"];
           wantedBy = ["multi-user.target"];
-          
+
           serviceConfig = {
             User = "printman";
             Group = "users";
             Type = "simple";
             Environment = ["DISPLAY=:1"];
             Restart = "on-failure";
-            
+
             ExecStart = "${pkgs.orca-slicer}/bin/orca-slicer";
           };
         };

@@ -25,25 +25,9 @@
       imports = [
         inputs.fpFmt.flakeModule
         inputs.home-manager.flakeModules.home-manager
-        inputs.agenix-rekey.flakeModule
+        # inputs.agenix-rekey.flakeModule
         ./outputs
       ];
-
-      perSystem = {
-        config,
-        lib,
-        pkgs,
-        ...
-      }: {
-        devShells.default = lib.mkForce (
-          pkgs.mkShell {
-            nativeBuildInputs = [
-              config.agenix-rekey.package
-              pkgs.age-plugin-fido2-hmac
-            ];
-          }
-        );
-      };
     };
 
   inputs = {
@@ -89,6 +73,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    secrets = {
+      url = "git+ssh://git@github.com/yung-gimp/nix-secrets";
+      flake = false;
+    };
 
     firefox-addons.url = "gitlab:/rycee/nur-expressions?dir=pkgs/firefox-addons";
 

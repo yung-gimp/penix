@@ -162,11 +162,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1758754034,
-        "narHash": "sha256-/YXPIQ8FjdKr3XPbmYTUtMuYn6PrIUaJ8UX2lWdqBqY=",
+        "lastModified": 1759098672,
+        "narHash": "sha256-l0TGxvrM8Bbtuzyde0AEW8A34NkyudlRKAHcL2K2h7g=",
         "owner": "freedpom",
         "repo": "FreedpomFlake",
-        "rev": "d938cfaf1be9b5673cf25b7992fc3caf3eeed935",
+        "rev": "cfcf3a65df7b77900017430d7f2d01be9a748bc1",
         "type": "github"
       },
       "original": {
@@ -778,11 +778,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1756903364,
-        "narHash": "sha256-vZh/YH2D7oDFek10r0TbGn3qJrqGv69sSP+oF8PFDqQ=",
+        "lastModified": 1759094885,
+        "narHash": "sha256-axmfkJn19E9yhAgfHcnYX0VM71XCyCMWu/5tUVOpM3U=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "6159629d05a0e92bb7fb7211e74106ae1d552401",
+        "rev": "6ee8473173af7a0181a788e8a3d4fa164f4cc72c",
         "type": "github"
       },
       "original": {
@@ -798,11 +798,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1759043321,
-        "narHash": "sha256-Efi3THvsIS6Qd97s52/PSSHWybDlSbtUZXP8l3AR9Ps=",
+        "lastModified": 1759094885,
+        "narHash": "sha256-axmfkJn19E9yhAgfHcnYX0VM71XCyCMWu/5tUVOpM3U=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "c75fd8e300b79502b8eecdacd8a426b12fadb460",
+        "rev": "6ee8473173af7a0181a788e8a3d4fa164f4cc72c",
         "type": "github"
       },
       "original": {
@@ -1088,7 +1088,24 @@
         "home-manager": "home-manager_3",
         "nixpkgs": "nixpkgs_8",
         "nvf": "nvf",
-        "preservation": "preservation"
+        "preservation": "preservation",
+        "secrets": "secrets"
+      }
+    },
+    "secrets": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1759099337,
+        "narHash": "sha256-Xe35AtQYaAd0ol0Qh+ay+Upe3MHUYElzUPqfNzi+nl0=",
+        "ref": "refs/heads/main",
+        "rev": "0456ceab8f9b4f5fc2729bc988584df0da55b184",
+        "revCount": 2,
+        "type": "git",
+        "url": "ssh://git@github.com/yung-gimp/nix-secrets"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@github.com/yung-gimp/nix-secrets"
       }
     },
     "systems": {

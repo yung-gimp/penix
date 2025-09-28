@@ -1,9 +1,8 @@
-{ lib, ... }:
-{
+{lib, ...}: {
   containers.klipper = {
     autoStart = false;
     bindMounts."/dev/serial/by-id/usb-klipper-mcu" = {
-      hostPath ="/dev/serial/by-id/usb-Klipper_stm32g0b1xx_1D002B001150415833323520-if00";
+      hostPath = "/dev/serial/by-id/usb-Klipper_stm32g0b1xx_1D002B001150415833323520-if00";
     };
     config = {
       users = {
@@ -35,10 +34,10 @@
           port = 7125;
           enable = true;
           settings.authorization = {
-          enable_api_key = false;
-          force_logins = false;
-          trusted_clients = ["0.0.0.0/0"];
-          cors_domains = ["*"];
+            enable_api_key = false;
+            force_logins = false;
+            trusted_clients = ["0.0.0.0/0"];
+            cors_domains = ["*"];
           };
         };
 
