@@ -25,6 +25,8 @@ in {
       };
     };
 
+    home.packages = [pkgs.playerctl];
+
     home.pointerCursor = {
       enable = true;
       package = pkgs.bibata-cursors;

@@ -39,7 +39,8 @@
           role = "admin";
           tags = ["base"];
           hashedPassword = "$6$i8pqqPIplhh3zxt1$bUH178Go8y5y6HeWKIlyjMUklE2x/8Vy9d3KiCD1WN61EtHlrpWrGJxphqu7kB6AERg6sphGLonDeJvS/WC730";
-          preservation.directories = [".config/r2modman" ".config/r2modmanPlus-local"];
+          preservation.directories = [".local/share/Terraria"];
+          extraGroups = ["libvirtd" "dialout"];
         };
       };
     };
@@ -71,6 +72,7 @@
         nvf.enable = true;
         foot.enable = true;
         zsh.enable = true;
+        bemenu.enable = true;
       };
     };
   };
@@ -78,6 +80,7 @@
   #age.rekey.agePlugins = [pkgs.age-plugin-fido2-hmac];
 
   boot = {
+    binfmt.emulatedSystems = ["aarch64-linux"];
     kernelPackages = pkgs.linuxPackages_zen;
     plymouth = {
       theme = "spinner_alt";
@@ -93,6 +96,13 @@
     fontconfig.defaultFonts.monospace = ["BlexMono Nerd Font Mono"];
     packages = with pkgs; [noto-fonts liberation_ttf nerd-fonts.iosevka-term-slab nerd-fonts.blex-mono];
   };
+
+  virtualisation.libvirtd = {
+    enable = true;
+    qemu.vhostUserPackages = with pkgs; [ virtiofsd ];
+  };
+
+  programs.virt-manager.enable = true;
 
   hardware.bluetooth.enable = true;
 
@@ -129,5 +139,6 @@
     ./programs
     ./disko.nix
     ./hardware.nix
+    ./testCT
   ];
 }

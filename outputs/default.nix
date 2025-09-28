@@ -9,20 +9,28 @@
   );
 
   mkHost = hostname:
+  let
+    secretsPath = "${self}/secrets/${hostname}";
+  in
     inputs.nixpkgs.lib.nixosSystem {
       specialArgs = {
-        pkgs-stable = import inputs.nixpkgs-stable {
-          system = "x86_64-linux";
-        };
-
         inherit
           inputs
           hostname
           lib
           self
+          secretsPath
           ;
       };
       modules = [
+        {
+          age.rekey = {
+            masterIdentities = ["${self}/secrets/mykey.pub"];
+            hostPubkey = builtins.readFile "${secretsPath}/host_key.pub";
+            localStorageDir = secretsPath;
+            storageMode = "local";
+          };
+        }
         ./nixosConfigurations/${hostname}
         inputs.home-manager.nixosModules.home-manager
         inputs.ff.nixosModules.freedpomFlake

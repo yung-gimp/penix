@@ -3,6 +3,7 @@
   inputs,
   ...
 }: {
+  xdg.enable = true;
   home = {
     packages = with pkgs; [
       htop
@@ -19,6 +20,9 @@
       xfce.tumbler
       ffmpegthumbnailer
       bluetuith
+      reaper
+      wineWowPackages.waylandFull
+      winetricks
     ];
     file.".local/share/icons/bibata-hyprcursor" = {
       recursive = true;

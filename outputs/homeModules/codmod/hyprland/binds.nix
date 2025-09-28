@@ -11,7 +11,7 @@ in {
       # Program
       "${mod}, M, exec, hyprctl dispatch exit"
       "${mod}, Q, exec, foot"
-      "${mod}, R, exec, rofi -show drun"
+      "${mod}, R, exec, bemenu-run"
 
       # Window
       "${mod} SHIFT, H, movewindow, l"
@@ -52,7 +52,15 @@ in {
       "${mod}, mouse:273, resizewindow"
     ];
 
-    binde = [
+    bindl = [
+      ", XF86AudioPlay, exec, playerctl play-pause"
+      ", XF86AudioPrev, exec, playerctl previous"
+      ", XF86AudioNext, exec, playerctl next"
+      ", XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+      "Control_L, XF86AudioMute, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 1"
+    ];
+
+    bindle = [
       ", XF86AudioRaiseVolume, exec, wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+"
       ", XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
     ];
