@@ -25,9 +25,26 @@
       imports = [
         inputs.fpFmt.flakeModule
         inputs.home-manager.flakeModules.home-manager
-        # inputs.agenix-rekey.flakeModule
-        ./outputs
+        inputs.agenix-rekey.flakeModule
+        ./modules
+        ./machines
       ];
+
+      # perSystem = {
+      #   config,
+      #   lib,
+      #   pkgs,
+      #   ...
+      # }: {
+      #   devShells.default = lib.mkForce (
+      #     pkgs.mkShell {
+      #       nativeBuildInputs = [
+      #         config.agenix-rekey.package
+      #         pkgs.age-plugin-fido2-hmac
+      #       ];
+      #     }
+      #   );
+      # };
     };
 
   inputs = {

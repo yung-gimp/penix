@@ -1,9 +1,11 @@
 {
+  config,
   inputs,
   self,
   pkgs,
   ...
 }: {
+  cm.system.secrets.enable = true;
   ff = {
     common.enable = true;
 
@@ -29,11 +31,13 @@
       preservation = {
         enable = true;
         preserveHome = true;
+        directories = ["/etc/ssh"];
       };
     };
 
     userConfig = {
       users = {
+        testuser.hashedPasswordFile = config.age.secrets.testpassword.path;
         codman = {
           uid = 1000;
           role = "admin";
@@ -46,12 +50,15 @@
     };
   };
 
-  services.pipewire = {
-    enable = true;
-    audio.enable = true;
-    alsa.enable = true;
-    jack.enable = true;
-    pulse.enable = true;
+  services = {
+    pipewire = {
+      enable = true;
+      audio.enable = true;
+      alsa.enable = true;
+      jack.enable = true;
+      pulse.enable = true;
+    };
+    openssh.enable = true;
   };
 
   home-manager.users.codman = {
@@ -76,8 +83,6 @@
       };
     };
   };
-
-  #age.rekey.agePlugins = [pkgs.age-plugin-fido2-hmac];
 
   boot = {
     binfmt.emulatedSystems = ["aarch64-linux"];
@@ -133,12 +138,19 @@
   };
   system.stateVersion = "25.05";
 
+  age = {
+    secrets = {
+      host_key.rekeyFile = "${inputs.secrets}/lpg/host_key.age";
+      testpassword.rekeyFile = "${inputs.secrets}/lpg/testpassword.age";
+    };
+  };
+
   imports = [
     inputs.disko.nixosModules.disko
     ./audio.nix
     ./programs
     ./disko.nix
     ./hardware.nix
-    ./testCT
+    ./printers
   ];
 }

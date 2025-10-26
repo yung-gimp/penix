@@ -8,9 +8,7 @@
     lib.attrsets.filterAttrs (_n: t: t == "directory") (builtins.readDir ./nixosConfigurations)
   );
 
-  mkHost = hostname: let
-    secretsPath = "${inputs.secrets}/${hostname}";
-  in
+  mkHost = hostname:
     inputs.nixpkgs.lib.nixosSystem {
       specialArgs = {
         inherit
@@ -18,18 +16,9 @@
           hostname
           lib
           self
-          secretsPath
           ;
       };
       modules = [
-        {
-          age.rekey = {
-            masterIdentities = ["${inputs.secrets}/mykey.pub"];
-            hostPubkey = builtins.readFile "${secretsPath}/host_key.pub";
-            localStorageDir = secretsPath;
-            storageMode = "local";
-          };
-        }
         inputs.agenix.nixosModules.default
         inputs.agenix-rekey.nixosModules.default
         ./nixosConfigurations/${hostname}

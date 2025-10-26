@@ -23,6 +23,7 @@
       reaper
       wineWowPackages.waylandFull
       winetricks
+      pokemmo-installer
     ];
     file.".local/share/icons/bibata-hyprcursor" = {
       recursive = true;
