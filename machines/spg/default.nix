@@ -25,7 +25,6 @@
       preservation = {
         enable = true;
         preserveHome = true;
-        directories = ["/etc/ssh"];
       };
     };
 
@@ -50,7 +49,6 @@
       jack.enable = true;
       pulse.enable = true;
     };
-    openssh.enable = true;
   };
 
   home-manager.users.codman = {
@@ -86,6 +84,14 @@
           selected_themes = ["spinner_alt"];
         })
       ];
+    };
+  };
+
+  programs = {
+    uwsm.enable = true;
+    hyprland = {
+      enable = true;
+      withUWSM = true;
     };
   };
 
