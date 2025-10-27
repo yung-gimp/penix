@@ -2,7 +2,7 @@
   disko.devices = {
     disk.nix = {
       type = "disk";
-      device = "/dev/disk/by-id/nvme-KINGSTON_OM8SEP41024Q-A0_50026B7686814B14";
+      device = "/dev/disk/by-id/nvme-KINGSTON_OM8PCP3512F-AI1_50026B768407BAF3";
       content = {
         type = "gpt";
         partitions = {
@@ -42,6 +42,13 @@
                     ];
                     swap.swapfile.size = "8G";
                   };
+                  "games" = {
+                    mountpoint = "/nix/persist/games";
+                    mountOptions = [
+                      "compress-force=zstd:1"
+                      "noatime"
+                    ];
+                  };
                 };
               };
             };
@@ -52,7 +59,7 @@
 
     disk.home = {
       type = "disk";
-      device = "/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_2TB_S6S2NS0TA52470B";
+      device = "/dev/disk/by-id/ata-Samsung_SSD_860_EVO_1TB_S599NJ0N339115R";
       content = {
         type = "luks";
         name = "homecrypt";
@@ -74,29 +81,11 @@
       };
     };
 
-    disk.games = {
-      type = "disk";
-      device = "/dev/disk/by-id/nvme-CT4000T700SSD3_2339E879638C";
-      content = {
-        type = "btrfs";
-        extraArgs = ["-f"];
-        subvolumes = {
-          "home" = {
-            mountpoint = "/nix/persist/games";
-            mountOptions = [
-              "compress-force=zstd:1"
-              "noatime"
-            ];
-          };
-        };
-      };
-    };
-
     nodev."/" = {
       fsType = "tmpfs";
       mountOptions = [
         "defaults"
-        "size=6G"
+        "size=3G"
         "mode=755"
       ];
     };
