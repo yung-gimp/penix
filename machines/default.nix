@@ -12,7 +12,6 @@
         inherit
           inputs
           hostname
-          lib
           self
           ;
       };
@@ -24,6 +23,7 @@
         inputs.home-manager.nixosModules.home-manager
         inputs.ff.nixosModules.freedpomFlake
         inputs.preservation.nixosModules.preservation
+        inputs.disko.nixosModules.disko
       ];
     };
 in {

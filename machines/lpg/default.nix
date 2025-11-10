@@ -11,10 +11,11 @@
 
     services = {
       ananicy.enable = true;
-      # virt-reality = {
-      #   enable = true;
-      #   autoStart = true;
-      # };
+      virt-reality = {
+        enable = true;
+        bitrate = 150000000;
+        autoStart = true;
+      };
 
       consoles = {
         enable = true;
@@ -146,7 +147,6 @@
   };
 
   imports = [
-    inputs.disko.nixosModules.disko
     ./audio.nix
     ./programs
     ./disko.nix
