@@ -1,5 +1,15 @@
-{pkgs, ...}: {
-  programs = {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  cfg = config.cm.programs.steam;
+in
+{
+  options.cm.programs.steam.enable = lib.mkEnableOption "Enable Steam";
+  config.programs = lib.mkIf cfg.enable {
     gamescope = {
       enable = true;
       capSysNice = true;
@@ -10,7 +20,7 @@
     };
     steam = {
       enable = true;
-      extraCompatPackages = with pkgs; [proton-ge-bin];
+      extraCompatPackages = with pkgs; [ proton-ge-bin ];
       protontricks.enable = true;
       # gamescopeSession = {
       #   enable = true;

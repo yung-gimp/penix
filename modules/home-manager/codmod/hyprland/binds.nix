@@ -2,10 +2,12 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   cfg = config.cm.hyprland;
   mod = "SUPER";
-in {
+in
+{
   wayland.windowManager.hyprland.settings = lib.mkIf cfg.enable {
     bind = [
       # Program

@@ -4,7 +4,7 @@
       "monitor.alsa.rules" = [
         {
           matches = [
-            {"device.name" = "alsa_card.usb-Focusrite_Clarett__4Pre_00009991-00";}
+            { "device.name" = "alsa_card.usb-Focusrite_Clarett__4Pre_00009991-00"; }
           ];
           actions = {
             update-props = {
@@ -14,7 +14,7 @@
         }
         {
           matches = [
-            {"node.name" = "alsa_input.usb-Focusrite_Clarett__4Pre_00009991-00.pro-input-0";}
+            { "node.name" = "alsa_input.usb-Focusrite_Clarett__4Pre_00009991-00.pro-input-0"; }
           ];
           actions = {
             update-props = {

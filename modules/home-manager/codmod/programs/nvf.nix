@@ -2,9 +2,11 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   cfg = config.cm.programs.nvf;
-in {
+in
+{
   options.cm.programs.nvf.enable = lib.mkEnableOption "Enable NVF";
 
   config.programs.nvf = lib.mkIf cfg.enable {

@@ -9,11 +9,11 @@
       "atkbd"
       "i8042"
     ];
-    kernelModules = ["kvm-intel"];
+    kernelModules = [ "kvm-intel" ];
   };
   hardware.enableRedistributableFirmware = true;
   hardware.nvidia.open = true;
-  services.xserver.videoDrivers = ["nvidia"];
+  services.xserver.videoDrivers = [ "nvidia" ];
 
   services = {
     thermald.enable = true;

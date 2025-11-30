@@ -3,9 +3,11 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.cm.hyprland;
-in {
+in
+{
   options.cm.hyprland.enable = lib.mkEnableOption "Enable hyprland";
 
   config = lib.mkIf cfg.enable {
@@ -25,7 +27,10 @@ in {
       };
     };
 
-    home.packages = [pkgs.playerctl];
+    home.packages = with pkgs; [
+      playerctl
+      hyprpolkitagent
+    ];
 
     home.pointerCursor = {
       enable = true;

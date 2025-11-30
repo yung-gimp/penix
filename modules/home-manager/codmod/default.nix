@@ -2,7 +2,8 @@
   pkgs,
   inputs,
   ...
-}: {
+}:
+{
   xdg.enable = true;
   home = {
     packages = with pkgs; [

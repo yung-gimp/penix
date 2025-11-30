@@ -2,9 +2,11 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   cfg = config.cm.programs.foot;
-in {
+in
+{
   options.cm.programs.foot.enable = lib.mkEnableOption "Enable foot terminal";
 
   config.programs.foot = lib.mkIf cfg.enable {

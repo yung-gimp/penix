@@ -2,25 +2,32 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   # Printer config directory relative to this file
   configDir = ./configs;
 
   # Filter ./config directory for directories containing a printer.cfg file, return a list
-  printerNames = lib.attrNames (lib.filterAttrs (name: type: (type == "directory") && ((builtins.readDir "${configDir}/${name}") ? "printer.cfg")) (builtins.readDir configDir));
+  printerNames = lib.attrNames (
+    lib.filterAttrs (
+      name: type: (type == "directory") && ((builtins.readDir "${configDir}/${name}") ? "printer.cfg")
+    ) (builtins.readDir configDir)
+  );
 
   # Take list of printer names as input, output attribute set containing printers and paths to their configs, auto generate moonraker config because it doesn't need to change per printer
-  printers = lib.mergeAttrsList (lib.imap0 (i: printerName: {
+  printers = lib.mergeAttrsList (
+    lib.imap0 (i: printerName: {
       ${printerName} = {
         klipperCfg = "${configDir}/${printerName}";
         moonrakerCfg = mkMoonraker printerName (builtins.toString (7125 + i));
         port = 7125 + i;
       };
-    })
-    printerNames);
+    }) printerNames
+  );
 
   # Template moonraker config
-  mkMoonraker = printerName: port:
+  mkMoonraker =
+    printerName: port:
     pkgs.writeText "moonraker-${printerName}.conf" ''
       [server]
       host: 0.0.0.0
@@ -50,8 +57,12 @@
       [update_manager]
       enable_system_updates: False
     '';
-in {
-  environment.systemPackages = [pkgs.klipper pkgs.moonraker];
+in
+{
+  environment.systemPackages = [
+    pkgs.klipper
+    pkgs.moonraker
+  ];
 
   # Create static users and groups for klipper and moonraker
   users = {
@@ -66,8 +77,8 @@ in {
       };
     };
     groups = {
-      klipper = {};
-      moonraker = {};
+      klipper = { };
+      moonraker = { };
     };
   };
 
@@ -86,95 +97,100 @@ in {
   '';
 
   systemd = {
-    services =
-      {
-        # Klipper template unit
-        "klipper@" = {
-          description = "Klipper 3D Printer Firmware - %i";
-          after = ["network.target"];
+    services = {
+      # Klipper template unit
+      "klipper@" = {
+        description = "Klipper 3D Printer Firmware - %i";
+        after = [ "network.target" ];
 
-          serviceConfig = {
-            Type = "simple";
-            User = "klipper";
-            Group = "klipper";
-            UMask = "002";
-            SupplementaryGroups = "dialout";
-            StateDirectory = "data-%i";
-            RuntimeDirectory = "klipper-%i";
-            WorkingDirectory = "${pkgs.klipper}/lib";
-            ExecStart = "${lib.getExe pkgs.klipper} --api-server /run/klipper-%i/klippy_uds /var/lib/data-%i/config/printer.cfg";
-            Restart = "always";
-            RestartSec = 10;
-          };
+        serviceConfig = {
+          Type = "simple";
+          User = "klipper";
+          Group = "klipper";
+          UMask = "002";
+          SupplementaryGroups = "dialout";
+          StateDirectory = "data-%i";
+          RuntimeDirectory = "klipper-%i";
+          WorkingDirectory = "${pkgs.klipper}/lib";
+          ExecStart = "${lib.getExe pkgs.klipper} --api-server /run/klipper-%i/klippy_uds /var/lib/data-%i/config/printer.cfg";
+          Restart = "always";
+          RestartSec = 10;
         };
+      };
 
-        # Moonraker template unit
-        "moonraker@" = {
-          description = "API Server for %i Klipper";
-          after = ["network.target"];
+      # Moonraker template unit
+      "moonraker@" = {
+        description = "API Server for %i Klipper";
+        after = [ "network.target" ];
 
-          path = [pkgs.iproute2];
+        path = [ pkgs.iproute2 ];
 
-          serviceConfig = {
-            Type = "simple";
-            User = "klipper";
-            Group = "moonraker";
-            SupplementaryGroups = "klipper";
-            StateDirectory = "data-%i";
-            RuntimeDirectory = "moonraker-%i";
-            WorkingDirectory = "/var/lib/data-%i";
-            Restart = "always";
-            RestartSec = 10;
-          };
+        serviceConfig = {
+          Type = "simple";
+          User = "klipper";
+          Group = "moonraker";
+          SupplementaryGroups = "klipper";
+          StateDirectory = "data-%i";
+          RuntimeDirectory = "moonraker-%i";
+          WorkingDirectory = "/var/lib/data-%i";
+          Restart = "always";
+          RestartSec = 10;
+        };
+      };
+    }
+    # Enable klipper/moonraker service template unit for each definition in printers
+    // lib.foldlAttrs (
+      acc: printerName: configs:
+      acc
+      // {
+        "klipper@${printerName}" = {
+          wantedBy = [ "multi-user.target" ];
+          overrideStrategy = "asDropin";
+        };
+        "moonraker@${printerName}" = {
+          wantedBy = [ "multi-user.target" ];
+          overrideStrategy = "asDropin";
+          serviceConfig.ExecStart = "${lib.getExe pkgs.moonraker} -d /var/lib/data-${printerName} -c ${configs.moonrakerCfg}";
         };
       }
-      # Enable klipper/moonraker service template unit for each definition in printers
-      // lib.foldlAttrs (acc: printerName: configs:
-        acc
-        // {
-          "klipper@${printerName}" = {
-            wantedBy = ["multi-user.target"];
-            overrideStrategy = "asDropin";
-          };
-          "moonraker@${printerName}" = {
-            wantedBy = ["multi-user.target"];
-            overrideStrategy = "asDropin";
-            serviceConfig.ExecStart = "${lib.getExe pkgs.moonraker} -d /var/lib/data-${printerName} -c ${configs.moonrakerCfg}";
-          };
-        }) {}
-      printers;
+    ) { } printers;
 
     # Create some directories and copy printer configs from the nix store to /var/lib so they are writeable by klipper
-    tmpfiles.rules = let
-      navi = pkgs.writeText "navi.json" (builtins.toJSON [
-        {
-          title = "Slicer";
-          href = "/slice/";
-          target = "_blank";
-          position = "90";
-        }
-      ]);
-    in
-      lib.flatten (lib.mapAttrsToList (printerName: configs: [
+    tmpfiles.rules =
+      let
+        navi = pkgs.writeText "navi.json" (
+          builtins.toJSON [
+            {
+              title = "Slicer";
+              href = "/slice/";
+              target = "_blank";
+              position = "90";
+            }
+          ]
+        );
+      in
+      lib.flatten (
+        lib.mapAttrsToList (printerName: configs: [
           "d /var/lib/data-${printerName}/logs 0775 klipper klipper"
           "d /var/lib/data-${printerName}/systemd 0775 klipper klipper"
           "d /var/lib/data-${printerName}/comms 0775 klipper klipper"
           "C /var/lib/data-${printerName}/config 0775 klipper klipper - ${configs.klipperCfg}"
           "d /var/lib/data-${printerName}/config/.theme 0775 klipper klipper"
           "L+ /var/lib/data-${printerName}/config/.theme/navi.json 0775 klipper klipper - ${navi}"
-        ])
-        printers)
+        ]) printers
+      )
       ++ [
         "d /var/lib/data-printers-shared/gcodes 0775 klipper klipper"
       ];
   };
 
-  fileSystems = lib.mapAttrs' (printerName: _:
+  fileSystems = lib.mapAttrs' (
+    printerName: _:
     lib.nameValuePair "/var/lib/data-${printerName}/gcodes" {
       device = "/var/lib/data-printers-shared/gcodes";
-      options = ["bind"];
-    })
-  printers;
+      options = [ "bind" ];
+    }
+  ) printers;
 
   services = {
     # Ensure klipper has access to relevant serial devices
@@ -185,15 +201,15 @@ in {
     # Enable mainsail with fixed moonraker instances
     mainsail = {
       enable = true;
-      nginx.locations."=/config.json".alias = pkgs.writeText "config.json" (builtins.toJSON {
-        instancesDB = "json";
-        instances =
-          lib.mapAttrsToList (_: config: {
+      nginx.locations."=/config.json".alias = pkgs.writeText "config.json" (
+        builtins.toJSON {
+          instancesDB = "json";
+          instances = lib.mapAttrsToList (_: config: {
             hostname = "localhost";
             inherit (config) port;
-          })
-          printers;
-      });
+          }) printers;
+        }
+      );
     };
   };
 }

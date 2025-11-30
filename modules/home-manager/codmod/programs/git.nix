@@ -2,9 +2,11 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   cfg = config.cm.programs.git;
-in {
+in
+{
   options.cm.programs.git.enable = lib.mkEnableOption "Enable git";
 
   config = lib.mkIf cfg.enable {

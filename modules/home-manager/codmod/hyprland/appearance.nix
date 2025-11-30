@@ -2,9 +2,11 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   cfg = config.cm.hyprland;
-in {
+in
+{
   wayland.windowManager.hyprland.settings = lib.mkIf cfg.enable {
     general = {
       gaps_in = 2;

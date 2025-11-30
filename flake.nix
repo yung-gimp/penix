@@ -15,36 +15,22 @@
     ];
   };
 
-  outputs = inputs @ {flake-parts, ...}:
-    flake-parts.lib.mkFlake {inherit inputs;} {
+  outputs =
+    inputs@{ flake-parts, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [
         "x86_64-linux"
         "aarch64-linux"
       ];
 
       imports = [
-        inputs.fpFmt.flakeModule
+        inputs.ff.fmtModule
         inputs.home-manager.flakeModules.home-manager
         inputs.agenix-rekey.flakeModule
+        inputs.disko.flakeModules.disko
         ./modules
         ./machines
       ];
-
-      # perSystem = {
-      #   config,
-      #   lib,
-      #   pkgs,
-      #   ...
-      # }: {
-      #   devShells.default = lib.mkForce (
-      #     pkgs.mkShell {
-      #       nativeBuildInputs = [
-      #         config.agenix-rekey.package
-      #         pkgs.age-plugin-fido2-hmac
-      #       ];
-      #     }
-      #   );
-      # };
     };
 
   inputs = {
@@ -52,12 +38,7 @@
     lnixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     disko = {
-      url = "github:nix-community/disko/latest";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    fpFmt = {
-      url = "github:freedpom/FreedpomFormatter";
+      url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

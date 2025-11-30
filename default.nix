@@ -3,12 +3,14 @@
   lib,
   self,
   ...
-}: let
+}:
+let
   hosts = builtins.attrNames (
     lib.attrsets.filterAttrs (_n: t: t == "directory") (builtins.readDir ./nixosConfigurations)
   );
 
-  mkHost = hostname:
+  mkHost =
+    hostname:
     inputs.nixpkgs.lib.nixosSystem {
       specialArgs = {
         inherit
@@ -37,7 +39,8 @@
       ./homeModules/${homeMod}
     ];
   };
-in {
+in
+{
   flake = {
     nixosConfigurations = lib.genAttrs hosts mkHost;
     homeModules = lib.genAttrs homeMods mkHomeMod;

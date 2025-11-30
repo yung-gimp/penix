@@ -13,7 +13,7 @@
               type = "filesystem";
               format = "vfat";
               mountpoint = "/boot";
-              mountOptions = ["umask=0077"];
+              mountOptions = [ "umask=0077" ];
             };
           };
 
@@ -25,7 +25,7 @@
               settings.allowDiscards = true;
               content = {
                 type = "btrfs";
-                extraArgs = ["-f"];
+                extraArgs = [ "-f" ];
                 subvolumes = {
                   "nix" = {
                     mountpoint = "/nix";
@@ -60,7 +60,7 @@
         # initrdUnlock = false; # don't unlock at boot
         content = {
           type = "btrfs";
-          extraArgs = ["-f"];
+          extraArgs = [ "-f" ];
           subvolumes = {
             "home" = {
               mountpoint = "/nix/persist/home";
@@ -79,7 +79,7 @@
       device = "/dev/disk/by-id/nvme-CT4000T700SSD3_2339E879638C";
       content = {
         type = "btrfs";
-        extraArgs = ["-f"];
+        extraArgs = [ "-f" ];
         subvolumes = {
           "home" = {
             mountpoint = "/nix/persist/games";

@@ -2,9 +2,11 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   cfg = config.cm.programs.bemenu;
-in {
+in
+{
   options.cm.programs.bemenu.enable = lib.mkEnableOption "Enable bemenu";
 
   config = lib.mkIf cfg.enable {

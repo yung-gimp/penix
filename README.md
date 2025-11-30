@@ -1,1 +1,1 @@
-:)
+muh nixos configuration

@@ -2,9 +2,11 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   cfg = config.cm.hyprland;
-in {
+in
+{
   wayland.windowManager.hyprland.settings = lib.mkIf cfg.enable {
     monitor = [
       "desc:ASUSTek COMPUTER INC VG32VQ1B S9LMTF038670, 2560x1440@165, 0x0, 1"

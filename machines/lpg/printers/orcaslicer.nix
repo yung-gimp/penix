@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   environment.systemPackages = with pkgs; [
     novnc
     orca-slicer
@@ -22,9 +23,9 @@
     services = {
       websockify = {
         description = "Websockify VNC Bridge";
-        after = ["orcaslicer-vnc.service"];
-        requires = ["orcaslicer-vnc.service"];
-        wantedBy = ["multi-user.target"];
+        after = [ "orcaslicer-vnc.service" ];
+        requires = [ "orcaslicer-vnc.service" ];
+        wantedBy = [ "multi-user.target" ];
 
         serviceConfig = {
           Type = "simple";
@@ -41,14 +42,14 @@
       };
       orcaslicer-vnc = {
         description = "OrcaSlicer VNC Service";
-        after = ["network.target"];
-        wantedBy = ["multi-user.target"];
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
 
         serviceConfig = {
           User = "printman";
           Group = "users";
           Type = "simple";
-          Environment = ["DISPLAY=:1"];
+          Environment = [ "DISPLAY=:1" ];
           Restart = "on-failure";
           RestartSec = 5;
 
@@ -69,15 +70,15 @@
 
       orcaslicer-app = {
         description = "OrcaSlicer Application";
-        after = ["orcaslicer-vnc.service"];
-        requires = ["orcaslicer-vnc.service"];
-        wantedBy = ["multi-user.target"];
+        after = [ "orcaslicer-vnc.service" ];
+        requires = [ "orcaslicer-vnc.service" ];
+        wantedBy = [ "multi-user.target" ];
 
         serviceConfig = {
           User = "printman";
           Group = "users";
           Type = "simple";
-          Environment = ["DISPLAY=:1"];
+          Environment = [ "DISPLAY=:1" ];
           Restart = "on-failure";
 
           ExecStart = "${pkgs.orca-slicer}/bin/orca-slicer";
