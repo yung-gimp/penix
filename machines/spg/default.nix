@@ -35,6 +35,7 @@
           tags = ["base"];
           hashedPassword = "$6$i8pqqPIplhh3zxt1$bUH178Go8y5y6HeWKIlyjMUklE2x/8Vy9d3KiCD1WN61EtHlrpWrGJxphqu7kB6AERg6sphGLonDeJvS/WC730";
           extraGroups = ["libvirtd" "dialout"];
+          preservation.directories = [".config/hexchat" ];
         };
       };
     };
@@ -64,7 +65,6 @@
       programs = {
         firefox.enable = true;
         git.enable = true;
-        media.enable = true;
         nvf.enable = true;
         foot.enable = true;
         zsh.enable = true;
@@ -73,7 +73,11 @@
     };
   };
 
+  security.allowUserNamespaces = true;
   boot = {
+    kernel.sysctl = {
+      "kernel.unpriveleged_userns_clone" = 1;
+    };
     binfmt.emulatedSystems = ["aarch64-linux"];
     kernelPackages = pkgs.linuxPackages_zen;
     plymouth = {
@@ -132,5 +136,6 @@
     inputs.disko.nixosModules.disko
     ./disko.nix
     ./hardware.nix
+    ./steam.nix
   ];
 }

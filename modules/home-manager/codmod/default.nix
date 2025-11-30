@@ -24,6 +24,7 @@
       wineWowPackages.waylandFull
       winetricks
       pokemmo-installer
+      hexchat
     ];
     file.".local/share/icons/bibata-hyprcursor" = {
       recursive = true;
