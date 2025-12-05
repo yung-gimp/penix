@@ -26,6 +26,7 @@
       winetricks
       pokemmo-installer
       hexchat
+      prismlauncher
     ];
     file.".local/share/icons/bibata-hyprcursor" = {
       recursive = true;
