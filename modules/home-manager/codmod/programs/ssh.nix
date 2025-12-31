@@ -10,21 +10,24 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    programs.ssh.matchBlocks = {
-      "*" = {
-        forwardAgent = false;
-        addKeysToAgent = "no";
-        compression = false;
-        serverAliveInterval = 0;
-        serverAliveCountMax = 3;
-        hashKnownHosts = false;
-        userKnownHostsFile = "~/.ssh/known_hosts";
-        controlMaster = "no";
-        controlPath = "~/.ssh/master-%r@%n:%p";
-        controlPersist = "no";
-        identityFile = "~/.ssh/id_ed25519_sk";
+    programs.ssh = {
+      enable = true;
+      matchBlocks = {
+        "*" = {
+          forwardAgent = false;
+          addKeysToAgent = "no";
+          compression = false;
+          serverAliveInterval = 0;
+          serverAliveCountMax = 3;
+          hashKnownHosts = false;
+          userKnownHostsFile = "~/.ssh/known_hosts";
+          controlMaster = "no";
+          controlPath = "~/.ssh/master-%r@%n:%p";
+          controlPersist = "no";
+          identityFile = "~/.ssh/id_ed25519_sk";
+        };
+        "github.com".identityFile = "~/.ssh/id_ed25519_github";
       };
-      "github.com".identityFile = "~/.ssh/id_ed25519_github";
     };
   };
 }

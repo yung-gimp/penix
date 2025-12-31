@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   self,
   pkgs,
@@ -36,7 +37,8 @@
           preservation.directories = [ ".local/share/PrismLauncher" ];
           userOptions = {
             uid = 1000;
-            hashedPassword = "$6$i8pqqPIplhh3zxt1$bUH178Go8y5y6HeWKIlyjMUklE2x/8Vy9d3KiCD1WN61EtHlrpWrGJxphqu7kB6AERg6sphGLonDeJvS/WC730";
+            # hashedPassword = "$6$i8pqqPIplhh3zxt1$bUH178Go8y5y6HeWKIlyjMUklE2x/8Vy9d3KiCD1WN61EtHlrpWrGJxphqu7kB6AERg6sphGLonDeJvS/WC730";
+            hashedPasswordFile = config.age.secrets.password.path;
             extraGroups = [
               "libvirtd"
               "dialout"
@@ -120,9 +122,6 @@
   hardware.bluetooth.enable = true;
 
   services.tailscale.enable = true;
-  systemd.tmpfiles.rules = [
-    "d /home/codman 0750 codman users" # should set createHome in userConfig
-  ];
 
   environment.variables = {
     EDITOR = "nvim";
@@ -147,7 +146,9 @@
   system.stateVersion = "25.05";
 
   imports = [
-    inputs.disko.nixosModules.disko
+    inputs.secrets.nixosModules.spg
+    inputs.agenix.nixosModules.default
+    inputs.agenix-rekey.nixosModules.default
     ./disko.nix
     ./hardware.nix
     ./steam.nix

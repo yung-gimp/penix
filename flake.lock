@@ -934,11 +934,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1766639127,
-        "narHash": "sha256-pl60EokMItLR25J03kyDNcycwtQWccuiRTYINgFUVDs=",
+        "lastModified": 1767145781,
+        "narHash": "sha256-QYdvh38VF4ByCgdp3RcZsjkpjrx0BSBHxveOkT8xLYE=",
         "ref": "refs/heads/main",
-        "rev": "0892e3e01779b085bd7c0e9afea49e9fcfc7daca",
-        "revCount": 6,
+        "rev": "75da00c2c4b5eec994dd8d5f9d646bd9ad858abe",
+        "revCount": 7,
         "type": "git",
         "url": "ssh://git@github.com/yung-gimp/nix-secrets"
       },
