@@ -24,8 +24,6 @@ let
       modules = [
         ./${hostname}
         self.nixosModules.codmod
-        inputs.agenix.nixosModules.default
-        inputs.agenix-rekey.nixosModules.default
         inputs.home-manager.nixosModules.home-manager
         inputs.ff.nixosModules.freedpomFlake
         inputs.ff.nixosModules.preservation

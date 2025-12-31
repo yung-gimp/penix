@@ -27,10 +27,18 @@ in
       "${mod} SHIFT, 2, movetoworkspace, 2"
       "${mod} SHIFT, 3, movetoworkspace, 3"
       "${mod} SHIFT, 4, movetoworkspace, 4"
+      "${mod} SHIFT, A, movetoworkspace, 1"
+      "${mod} SHIFT, S, movetoworkspace, 2"
+      "${mod} SHIFT, D, movetoworkspace, 3"
+      "${mod} SHIFT, F, movetoworkspace, 4"
       "${mod} ALT SHIFT, 1, movetoworkspace, 5"
       "${mod} ALT SHIFT, 2, movetoworkspace, 6"
       "${mod} ALT SHIFT, 3, movetoworkspace, 7"
       "${mod} ALT SHIFT, 4, movetoworkspace, 8"
+      "${mod} ALT SHIFT, A, movetoworkspace, 5"
+      "${mod} ALT SHIFT, S, movetoworkspace, 6"
+      "${mod} ALT SHIFT, D, movetoworkspace, 7"
+      "${mod} ALT SHIFT, F, movetoworkspace, 8"
 
       # Workspace
       "${mod}, H, movefocus, l"

@@ -27,7 +27,6 @@
         inputs.ff.fmtModule
         inputs.home-manager.flakeModules.home-manager
         inputs.agenix-rekey.flakeModule
-        inputs.disko.flakeModules.disko
         ./modules
         ./machines
       ];
@@ -35,7 +34,6 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    lnixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     disko = {
       url = "github:nix-community/disko";
@@ -44,13 +42,9 @@
 
     ff = {
       url = "github:freedpom/FreedpomFlake";
+      # url = "/home/codman/Documents/nix/FreedpomFlake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    # ff = {
-    #   url = "/home/codman/Documents/nix/FreedpomFlake";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -74,7 +68,8 @@
 
     secrets = {
       url = "git+ssh://git@github.com/yung-gimp/nix-secrets";
-      flake = false;
+      # url = "/home/codman/Documents/nix/nix-secrets";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     firefox-addons.url = "gitlab:/rycee/nur-expressions?dir=pkgs/firefox-addons";

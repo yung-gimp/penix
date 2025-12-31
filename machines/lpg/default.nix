@@ -1,11 +1,12 @@
 {
+  config,
   inputs,
+  lib,
   self,
   pkgs,
   ...
 }:
 {
-  cm.system.secrets.enable = true;
   ff = {
     common.enable = true;
 
@@ -32,28 +33,23 @@
       preservation = {
         enable = true;
         preserveHome = true;
-        directories = [ "/etc/ssh" ];
       };
     };
 
-    userConfig = {
-      users = {
-        codman = {
-          role = "admin";
-          tags = [ "base" ];
-          preservation.directories = [
-            ".local/share/Terraria"
-            ".local/share/PrismLauncher"
-          ];
-          userOptions = {
-            uid = 1000;
-            hashedPassword = "$6$i8pqqPIplhh3zxt1$bUH178Go8y5y6HeWKIlyjMUklE2x/8Vy9d3KiCD1WN61EtHlrpWrGJxphqu7kB6AERg6sphGLonDeJvS/WC730";
-            extraGroups = [
-              "libvirtd"
-              "dialout"
-            ];
-          };
-        };
+    userConfig.users.codman = {
+      role = "admin";
+      tags = [ "base" ];
+      preservation.directories = [
+        ".local/share/Terraria"
+      ];
+      userOptions = {
+        uid = 1000;
+        hashedPasswordFile = config.age.secrets.password.path;
+        extraGroups = [
+          "podman"
+          "libvirtd"
+          "dialout"
+        ];
       };
     };
   };
@@ -96,7 +92,7 @@
       programs = {
         firefox.enable = true;
         git.enable = true;
-        media.enable = true;
+        # media.enable = true;
         nvf.enable = true;
         foot.enable = true;
         zsh.enable = true;
@@ -106,6 +102,7 @@
   };
 
   boot = {
+    loader.systemd-boot.configurationLimit = lib.mkForce 25;
     binfmt.emulatedSystems = [ "aarch64-linux" ];
     kernelPackages = pkgs.linuxPackages_zen;
     plymouth = {
@@ -128,16 +125,29 @@
     ];
   };
 
-  virtualisation.libvirtd = {
-    enable = true;
-    qemu.vhostUserPackages = with pkgs; [ virtiofsd ];
+  virtualisation = {
+    containers.enable = true;
+    podman = {
+      enable = true;
+      dockerCompat = true;
+      defaultNetwork.settings.dns_enabled = true;
+    };
+    libvirtd = {
+      enable = true;
+      qemu.vhostUserPackages = with pkgs; [ virtiofsd ];
+    };
   };
 
   programs.virt-manager.enable = true;
 
   hardware.bluetooth.enable = true;
+  hardware.nitrokey.enable = true;
 
-  services.tailscale.enable = true;
+  services = {
+    tailscale.enable = true;
+    flatpak.enable = true;
+  };
+
   systemd.tmpfiles.rules = [
     "d /home/codman 0750 codman users" # should maybe add to preservation
   ];
@@ -164,16 +174,12 @@
   };
   system.stateVersion = "25.05";
 
-  age = {
-    secrets = {
-      host_key.rekeyFile = "${inputs.secrets}/lpg/host_key.age";
-      testpassword.rekeyFile = "${inputs.secrets}/lpg/testpassword.age";
-    };
-  };
-
   imports = [
     ./audio.nix
     ./disko.nix
     ./hardware.nix
+    inputs.secrets.nixosModules.lpg
+    inputs.agenix.nixosModules.default
+    inputs.agenix-rekey.nixosModules.default
   ];
 }

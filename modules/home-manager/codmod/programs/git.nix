@@ -13,8 +13,13 @@ in
     programs = {
       git = {
         enable = true;
-        userName = "yung-gimp";
-        userEmail = "172232649+yung-gimp@users.noreply.github.com";
+        settings = {
+          user = {
+            name = "yung-gimp";
+            email = "172232649+yung-gimp@users.noreply.github.com";
+          };
+          core.editor = "nvim";
+        };
       };
 
       gh = {

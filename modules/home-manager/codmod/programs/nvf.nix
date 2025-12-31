@@ -41,7 +41,7 @@ in
           nix = {
             enable = true;
             lsp.enable = true;
-            lsp.server = "nixd";
+            lsp.servers = [ "nixd" ];
           };
           rust = {
             enable = true;
