@@ -255,13 +255,13 @@
         "wm-niri": "wm-niri"
       },
       "locked": {
-        "lastModified": 1767475558,
-        "narHash": "sha256-8JcT8JUzh2H9hy1RFvdPMVqMa9Kl47EK35YccEVHL4M=",
-        "path": "/home/codman/Documents/FreedpomFlake",
+        "lastModified": 1767639130,
+        "narHash": "sha256-fuWJvJ/+vZ2a7TowxOk87QPTxt4qDbmEjefMWjI/yYU=",
+        "path": "/home/codman/Documents/nix/FreedpomFlake",
         "type": "path"
       },
       "original": {
-        "path": "/home/codman/Documents/FreedpomFlake",
+        "path": "/home/codman/Documents/nix/FreedpomFlake",
         "type": "path"
       }
     },
@@ -1392,11 +1392,11 @@
     },
     "nixpkgs_8": {
       "locked": {
-        "lastModified": 1766902085,
-        "narHash": "sha256-coBu0ONtFzlwwVBzmjacUQwj3G+lybcZ1oeNSQkgC0M=",
+        "lastModified": 1767379071,
+        "narHash": "sha256-EgE0pxsrW9jp9YFMkHL9JMXxcqi/OoumPJYwf+Okucw=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "c0b0e0fddf73fd517c3471e546c0df87a42d53f4",
+        "rev": "fb7944c166a3b630f177938e478f0378e64ce108",
         "type": "github"
       },
       "original": {
@@ -1560,13 +1560,16 @@
       },
       "locked": {
         "lastModified": 1767220405,
-        "narHash": "sha256-VQO04MrvviHBjtK48SQuMCzoteHrwFMhmp31sUchCu4=",
-        "path": "/home/codman/Documents/nix-secrets",
-        "type": "path"
+        "narHash": "sha256-nUOgEWdiRx8rd4c7radsTRh0iwCigXle1aLDOEt/5vU=",
+        "ref": "refs/heads/main",
+        "rev": "bd97cd6e55f48968ec40ac1033feb092016a048d",
+        "revCount": 7,
+        "type": "git",
+        "url": "ssh://git@github.com/yung-gimp/nix-secrets"
       },
       "original": {
-        "path": "/home/codman/Documents/nix-secrets",
-        "type": "path"
+        "type": "git",
+        "url": "ssh://git@github.com/yung-gimp/nix-secrets"
       }
     },
     "systems": {

@@ -10,6 +10,7 @@
   ff = {
     common.enable = true;
 
+    windowManagers.hyprland.enable = true;
     services = {
       ananicy.enable = true;
       virt-reality = {
@@ -86,9 +87,13 @@
     imports = [
       self.homeModules.codmod
       inputs.ff.homeModules.ff
+      inputs.ff.homeModules.windowManagers
     ];
 
-    ff.programs.bash.enable = true;
+    ff = {
+      windowManagers.hyprland.enable = true;
+      programs.bash.enable = true;
+    };
 
     cm = {
       hyprland.enable = true;
@@ -184,5 +189,6 @@
     inputs.secrets.nixosModules.lpg
     inputs.agenix.nixosModules.default
     inputs.agenix-rekey.nixosModules.default
+    inputs.ff.nixosModules.windowManagers
   ];
 }

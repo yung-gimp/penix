@@ -9,7 +9,7 @@
   ff = {
     common.enable = true;
 
-    programs.hyprland.enable = true;
+    windowManagers.hyprland.enable = true;
     services = {
       ananicy.enable = true;
       consoles = {
@@ -78,7 +78,7 @@
     ];
 
     ff = {
-      desktop.hypr.land.enable = true;
+      windowManagers.hyprland.enable = true;
       programs.bash.enable = true;
     };
 
