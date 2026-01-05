@@ -1,3 +1,4 @@
+{ lib, ... }:
 {
   boot = {
     initrd.availableKernelModules = [
@@ -12,7 +13,15 @@
     kernelModules = [ "kvm-intel" ];
   };
   hardware.enableRedistributableFirmware = true;
-  hardware.nvidia.open = true;
+  hardware.nvidia = {
+    open = true;
+    modesetting.enable = true;
+    prime = {
+      sync.enable = true;
+      intelBusId = "PCI:0:2:0";
+      nvidiaBusId = "PCI:1:0:0";
+    };
+  };
   services.xserver.videoDrivers = [ "nvidia" ];
 
   services = {
@@ -39,6 +48,35 @@
           tubo = "auto";
         };
       };
+    };
+  };
+  specialisation.on-the-go.configuration = {
+    system.nixos.tags = [ "on-the-go" ];
+    hardware.nvidia.prime = {
+      offload = {
+        enable = lib.mkForce true;
+        enableOffloadCmd = lib.mkForce true;
+      };
+      sync.enable = lib.mkForce false;
+    };
+  };
+    ff.hardware.displays = {
+    "eDP-1" = {
+      includeKernelParams = true;
+      resolution = {
+        width = 1080;
+        height = 1920;
+      };
+      framerate = 144;
+      vrr = 3;
+      colorProfile = "auto";
+      colorDepth = 32;
+      workspaces = [
+        "1"
+        "2"
+        "3"
+        "4"
+      ];
     };
   };
 }

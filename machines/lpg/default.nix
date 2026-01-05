@@ -20,7 +20,10 @@
 
       consoles = {
         enable = true;
-        getty = [ "codman@tty1" ];
+        getty = [
+          "codman@tty1"
+          "tty3"
+        ];
         kmscon = [ "tty2" ];
       };
       # pipewire.enable = true;
@@ -82,7 +85,7 @@
     home.stateVersion = "25.05";
     imports = [
       self.homeModules.codmod
-      inputs.ff.homeModules.freedpomFlake
+      inputs.ff.homeModules.ff
     ];
 
     ff.programs.bash.enable = true;

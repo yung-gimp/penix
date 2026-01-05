@@ -9,11 +9,15 @@
   ff = {
     common.enable = true;
 
+    programs.hyprland.enable = true;
     services = {
       ananicy.enable = true;
       consoles = {
         enable = true;
-        getty = [ "codman@tty1" ];
+        getty = [
+          "codman@tty1"
+          "tty3"
+        ];
         kmscon = [ "tty2" ];
       };
       # pipewire.enable = true;
@@ -37,7 +41,6 @@
           preservation.directories = [ ".local/share/PrismLauncher" ];
           userOptions = {
             uid = 1000;
-            # hashedPassword = "$6$i8pqqPIplhh3zxt1$bUH178Go8y5y6HeWKIlyjMUklE2x/8Vy9d3KiCD1WN61EtHlrpWrGJxphqu7kB6AERg6sphGLonDeJvS/WC730";
             hashedPasswordFile = config.age.secrets.password.path;
             extraGroups = [
               "libvirtd"
@@ -51,7 +54,7 @@
 
   cm.programs = {
     steam.enable = true;
-    hyprland.enable = true;
+    # hyprland.enable = true;
   };
 
   networking.networkmanager.enable = true;
@@ -70,10 +73,14 @@
     home.stateVersion = "25.05";
     imports = [
       self.homeModules.codmod
-      inputs.ff.homeModules.freedpomFlake
+      inputs.ff.homeModules.ff
+      inputs.ff.homeModules.windowManagers
     ];
 
-    ff.programs.bash.enable = true;
+    ff = {
+      desktop.hypr.land.enable = true;
+      programs.bash.enable = true;
+    };
 
     cm = {
       hyprland.enable = true;
@@ -108,6 +115,7 @@
       enable = true;
       withUWSM = true;
     };
+    niri.enable = true;
   };
 
   fonts = {
@@ -121,7 +129,10 @@
 
   hardware.bluetooth.enable = true;
 
-  services.tailscale.enable = true;
+  services = {
+    tailscale.enable = true;
+    flatpak.enable = true;
+  };
 
   environment.variables = {
     EDITOR = "nvim";
@@ -138,6 +149,7 @@
 
   nixpkgs = {
     hostPlatform = "x86_64-linux";
+    overlays = [ inputs.niri.overlays.niri ];
     config = {
       allowUnfree = true;
       permittedInsecurePackages = [ "qtwebengine-5.15.19" ];
@@ -146,9 +158,11 @@
   system.stateVersion = "25.05";
 
   imports = [
+    inputs.ff.nixosModules.windowManagers
     inputs.secrets.nixosModules.spg
     inputs.agenix.nixosModules.default
     inputs.agenix-rekey.nixosModules.default
+    inputs.niri.nixosModules.niri
     ./disko.nix
     ./hardware.nix
     ./steam.nix

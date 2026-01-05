@@ -12,7 +12,7 @@ in
 
   config = lib.mkIf cfg.enable {
     wayland.windowManager.hyprland = {
-      enable = true;
+      # enable = true;
       settings = {
         ecosystem = {
           no_update_news = true;
@@ -62,6 +62,6 @@ in
   imports = [
     ./appearance.nix
     ./binds.nix
-    ./displays.nix
+    #     ./displays.nix
   ];
 }
